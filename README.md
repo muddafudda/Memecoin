@@ -2,6 +2,8 @@ Memecoin-v2.3.0.0 Beta Release
 =========
 
 Memecoin-v2.3.0.0 Beta Release
+Fork at block 1050000 to adjust diff per block
+Fork on Feb 1, 2015 to kick older clients. 
 
 What is Memecoin [MEM]? 
  Memecoin is an alternate virtual cryptocurrency made for users to share, mine and trade. 
