@@ -39,7 +39,7 @@ const std::string CLIENT_NAME("MemeCoin");
 // git will put "#define GIT_ARCHIVE 1" on the next line inside archives. 
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#    define GIT_COMMIT_ID "-beta-release-1.3"
+#    define GIT_COMMIT_ID "Meme"
 #    define GIT_COMMIT_DATE "$Format:%cD"
 #endif
 
