@@ -887,6 +887,31 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     // Genesis block
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
+        
+    // Memecoin difficulty adjustment protocol switch
+    int64 nDiffSwitchBlock = 1050000; // Adjust diff every block after block 1050000
+    int nHeight = pindexLast->nHeight + 1;
+    bool fNewDifficultyProtocol = (nHeight >= nDiffSwitchBlock || fTestNet);
+    
+    //Starting at block 1050000 retarget every block with exponential moving toward target spacing
+    if (fNewDifficultyProtocol)
+    {
+        if (pindexLast->pprev == NULL)
+            return nProofOfWorkLimit; // first block after genesis (for testnet)
+            
+        int64 nActualSpacing = pindexLast->GetBlockTime() - pindexLast->pprev->GetBlockTime();
+        
+        CBigNum bnNew;
+        bnNew.SetCompact(pindexLast->nBits);
+        
+        bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
+        bnNew /= ((nInterval + 1) * nTargetSpacing);
+
+        if (bnNew > bnProofOfWorkLimit) 
+            bnNew = bnProofOfWorkLimit;
+
+        return bnNew.GetCompact();
+    }
 
     // Only change once per interval
     if ((pindexLast->nHeight+1) % nInterval != 0)
@@ -2413,8 +2438,9 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CAddress addrMe;
         CAddress addrFrom;
         uint64 nNonce = 1;
+        bool badVersion = false;
         vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
-        if (pfrom->nVersion > 70001)
+        if (pfrom->nVersion > 60006)
         {
             // Since February 20, 2012, the protocol is initiated at version 209,
             // and earlier versions are no longer supported
@@ -2422,7 +2448,22 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             pfrom->fDisconnect = true;
             return false;
         }
-
+        if(nTime < 1422748801)// After Feb 1, 2015 00:00:01 GMT all clients 2.3 or version 60004 or earlier will be disconnected. 
+        {
+            if(pfrom->nVersion < 60000)
+                badVersion = true;
+        }
+        else
+        {
+            if(pfrom->nVersion < 60004)
+                badVersion = true;
+        }
+        if(badVersion)
+        {
+            printf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString().c_str(), pfrom->nVersion);
+            pfrom->fDisconnect = true;
+            return false;
+        }
         if (pfrom->nVersion == 10300)
             pfrom->nVersion = 300;
         if (!vRecv.empty())
