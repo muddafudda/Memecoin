@@ -1,7 +1,7 @@
-Memecoin-v2.1.0.0 Beta Release
+Memecoin-v2.3.0.0 Beta Release
 =========
 
-Memecoin-v2.1.0.0 Beta Release
+Memecoin-v2.3.0.0 Beta Release
 
 What is Memecoin [MEM]? 
  Memecoin is an alternate virtual cryptocurrency made for users to share, mine and trade. 
@@ -18,15 +18,9 @@ Block Rewards-
 5000-10000 @ 250 Coins Per Block
 10000 100  @ Coins Per Block
 
-Orphans and rejects are part off the fun so starting difficulty 0.00003052
-
 Block times are targeted at 30 seconds with difficulty increasing every 600 blocks (5Hrs). Confirms every 6 blocks.
 
- How to Mine Memecoins? 
-Download the client for your platform below.
-Version 3 
-Windows qt Client - Source 1 Source 2
-Source Code 
+
 Windows users. Download and extract the files to C:\Users\YOURUSERNAME\AppData\Roaming\memecoin
 Create a config file by right clicking in the new folder, select text document and type the following
 rpcuser=YOURUSERNAME 
