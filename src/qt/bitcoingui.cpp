@@ -28,7 +28,7 @@
 #include "notificator.h"
 #include "guiutil.h"
 #include "rpcconsole.h"
-
+#include "blockbrowser.h"
 #ifdef Q_WS_MAC
 #include "macdockiconhandler.h"
 #endif
@@ -96,7 +96,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     // Create tabs
     overviewPage = new OverviewPage();
-
+    blockBrowser = new BlockBrowser(this);
     miningPage = new MiningPage(this);
 
     transactionsPage = new QWidget(this);
@@ -113,9 +113,12 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     signVerifyMessageDialog = new SignVerifyMessageDialog(this);
 
+    
+
     centralWidget = new QStackedWidget(this);
     centralWidget->addWidget(overviewPage);
     centralWidget->addWidget(miningPage);
+    centralWidget->addWidget(blockBrowser);
     centralWidget->addWidget(transactionsPage);
     centralWidget->addWidget(addressBookPage);
     centralWidget->addWidget(receiveCoinsPage);
@@ -216,7 +219,12 @@ void BitcoinGUI::createActions()
     addressBookAction->setCheckable(true);
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
-
+    blockAction = new QAction(QIcon(":/icons/blexp"), tr("&Block Explorer"), this);
+    blockAction->setStatusTip(tr("Explore the BlockChain"));
+    blockAction->setToolTip(blockAction->statusTip());
+    blockAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    blockAction->setCheckable(true);
+    tabGroup->addAction(blockAction);
     receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive coins"), this);
     receiveCoinsAction->setToolTip(tr("Show the list of addresses for receiving payments"));
     receiveCoinsAction->setCheckable(true);
@@ -244,6 +252,13 @@ void BitcoinGUI::createActions()
     tabGroup->addAction(firstClassMessagingAction);
 #endif
 
+     blockAction = new QAction(QIcon(":/icons/blexp"), tr("&Block Explorer"), this);
+     blockAction->setStatusTip(tr("Explore the BlockChain"));
+     blockAction->setToolTip(blockAction->statusTip());
+     blockAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+     blockAction->setCheckable(true);
+     tabGroup->addAction(blockAction);
+
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(miningAction, SIGNAL(triggered()), this, SLOT(gotoMiningPage()));
@@ -251,6 +266,7 @@ void BitcoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
+    connect(blockAction, SIGNAL(triggered()), this, SLOT(gotoBlockBrowser()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -259,6 +275,7 @@ void BitcoinGUI::createActions()
     connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
+    connect(blockAction, SIGNAL(triggered()), this, SLOT(gotoBlockBrowser()));
 #ifdef FIRST_CLASS_MESSAGING
     connect(firstClassMessagingAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     // Always start with the sign message tab for FIRST_CLASS_MESSAGING
@@ -329,6 +346,9 @@ void BitcoinGUI::createMenuBar()
     settings->addSeparator();
     settings->addAction(optionsAction);
 
+    QMenu *network = appMenuBar->addMenu(tr("&Network"));
+    network->addAction(blockAction);
+
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(openRPCConsoleAction);
     help->addSeparator();
@@ -353,6 +373,7 @@ void BitcoinGUI::createToolBars()
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar2->addAction(exportAction);
+    toolbar2->addAction(blockAction);
 }
 
 void BitcoinGUI::setClientModel(ClientModel *clientModel)
@@ -478,6 +499,8 @@ void BitcoinGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 #endif
+
+
 
 void BitcoinGUI::optionsClicked()
 {
@@ -725,10 +748,21 @@ void BitcoinGUI::incomingTransaction(const QModelIndex & parent, int start, int 
     }
 }
 
+
+
 void BitcoinGUI::gotoOverviewPage()
 {
     overviewAction->setChecked(true);
     centralWidget->setCurrentWidget(overviewPage);
+
+    exportAction->setEnabled(false);
+    disconnect(exportAction, SIGNAL(triggered()), 0, 0);
+}
+
+void BitcoinGUI::gotoBlockBrowser()
+{
+    blockAction->setChecked(true);
+    centralWidget->setCurrentWidget(blockBrowser);
 
     exportAction->setEnabled(false);
     disconnect(exportAction, SIGNAL(triggered()), 0, 0);
@@ -800,6 +834,11 @@ void BitcoinGUI::gotoSignMessageTab(QString addr)
     if(!addr.isEmpty())
         signVerifyMessageDialog->setAddress_SM(addr);
 }
+
+//void BitcoinGUI::gotoBlockBrowser()
+//{
+//   if (walletStack) walletStack->gotoBlockBrowser();
+//}
 
 void BitcoinGUI::gotoVerifyMessageTab(QString addr)
 {
