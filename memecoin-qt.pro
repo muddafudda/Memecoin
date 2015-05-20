@@ -14,6 +14,8 @@ CONFIG += no_include_pwd
 # Dependency library locations can be customized with:
 #    BOOST_INCLUDE_PATH, BOOST_LIB_PATH, BDB_INCLUDE_PATH,
 #    BDB_LIB_PATH, OPENSSL_INCLUDE_PATH and OPENSSL_LIB_PATH respectively
+#CONFIG += thread
+#CONFIG += static
 #BOOST_LIB_SUFFIX=-mgw49-mt-s-1_55
 #BOOST_INCLUDE_PATH=C:/deps/boost_1_55_0
 #BOOST_LIB_PATH=C:/deps/boost_1_55_0/stage/lib
@@ -31,6 +33,22 @@ CONFIG += no_include_pwd
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
+
+!win32 {
+    # for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
+    QMAKE_CXXFLAGS *= -fstack-protector-all
+    QMAKE_LFLAGS *= -fstack-protector-all
+    # Exclude on Windows cross compile with MinGW 4.2.x, as it will result in a non-working executable!
+    # This can be enabled for Windows, when we switch to MinGW >= 4.4.x.
+}
+# for extra security (see: https://wiki.debian.org/Hardening): this flag is GCC compiler-specific
+QMAKE_CXXFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
+# for extra security on Windows: enable ASLR and DEP via GCC linker flags
+win32:QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
+# on Windows: enable GCC large address aware linker flag
+win32:QMAKE_LFLAGS *= -Wl,--large-address-aware -static
+# i686-w64-mingw32
+win32:QMAKE_LFLAGS *= -static-libgcc -static-libstdc++
 
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
