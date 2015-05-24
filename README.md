@@ -1,5 +1,13 @@
-Memecoin-v2.3.0.0 Beta Release
+Memecoin-v2.4.0.0 Beta Release
 =========
+
+Memecoin-v2.4.0.0 Beta Release
+Added block browser
+added checkpoints
+wallet logo
+various fixes
+updated build guide for windows
+
 
 Memecoin-v2.3.0.0 Beta Release
 Fork at block 1050000 to adjust diff per block
