@@ -1143,7 +1143,7 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"Memecoin Host", "ip 54.252.196.5"},
+    {"Memecoin Host", "ip 54.24.129.149"},
     {"Memecoin Host", "ip 52.25.176.239"}
     
 };
