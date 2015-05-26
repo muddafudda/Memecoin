@@ -888,7 +888,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
         
-    // Memecoin difficulty adjustment protocol switch
+    // MemeCoin difficulty adjustment protocol switch
     int64 nDiffSwitchBlock = 1050000; // Adjust diff every block after block 1050000
     int nHeight = pindexLast->nHeight + 1;
     bool fNewDifficultyProtocol = (nHeight >= nDiffSwitchBlock || fTestNet);

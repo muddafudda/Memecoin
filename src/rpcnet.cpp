@@ -1,4 +1,6 @@
-// Copyright (c) 2009-2012 Bitcoin Developers
+// Copyright (c) 2011-2015 Litecoin Developers
+// Copyright (c) 2011-2015 Litecoin Developers
+// Copyright (c) 2009-2015 Bitcoin Developers
 // Copyright (c) 2011-2015 Litecoin Developers
 // Copyright (c) 2013-2015 MemeCoin Developers
 // Distributed under the MIT/X11 software license, see the accompanying

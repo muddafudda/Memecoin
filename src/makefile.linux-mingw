@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2010 Satoshi Nakamoto
+# Copyright (c) 2009-2015 Satoshi Nakamoto
 # Distributed under the MIT/X11 software license, see the accompanying
 # file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
@@ -70,7 +70,7 @@ OBJS= \
     obj/walletdb.o \
     obj/noui.o
 
-all: MemeCoind.exe
+all: MemeCoin.exe
 
 obj/scrypt.o: scrypt.c
 	i586-mingw32msvc-gcc -c $(CFLAGS) -o $@ $^
@@ -83,7 +83,7 @@ DEFS += -DHAVE_BUILD_INFO
 obj/%.o: %.cpp $(HEADERS)
 	i586-mingw32msvc-g++ -c $(CFLAGS) -o $@ $<
 
-MemeCoind.exe: $(OBJS:obj/%=obj/%)
+MemeCoin.exe: $(OBJS:obj/%=obj/%)
 	i586-mingw32msvc-g++ $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -97,7 +97,7 @@ test_MemeCoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 
 clean:
 	-rm -f obj/*.o
-	-rm -f MemeCoind.exe
+	-rm -f MemeCoin.exe
 	-rm -f obj-test/*.o
 	-rm -f test_MemeCoin.exe
 	-rm -f src/build.h

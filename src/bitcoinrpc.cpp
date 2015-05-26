@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
-// Copyright (c) 2011-2012 The Litecoin Developers
-// Copyright (c) 2013-2015 MemeCoin Developers
+// Copyright (c) 2011-2015 The Litecoin Developers
+// Copyright (c) 2013-2015 The MemeCoin Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -313,7 +313,6 @@ Value getdifficulty(const Array& params, bool fHelp)
 }
 
 
-// MemeCoin: Return average network hashes per second based on last number of blocks.
 Value GetNetworkHashPS(int lookup) {
     if (pindexBest == NULL)
         return 0;
@@ -542,7 +541,7 @@ Value setaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "setaccount <MemeCoinaddress> <account>\n"
+            "setaccount <MemeCoin address> <account>\n"
             "Sets the account associated with the given address.");
 
     CBitcoinAddress address(params[0].get_str());
@@ -572,7 +571,7 @@ Value getaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccount <MemeCoinaddress>\n"
+            "getaccount <MemeCoin address>\n"
             "Returns the account associated with the given address.");
 
     CBitcoinAddress address(params[0].get_str());
@@ -644,7 +643,7 @@ Value sendtoaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 4)
         throw runtime_error(
-            "sendtoaddress <MemeCoinaddress> <amount> [comment] [comment-to]\n"
+            "sendtoaddress <MemeCoin address> <amount> [comment] [comment-to]\n"
             "<amount> is a real and is rounded to the nearest 0.00000001"
             + HelpRequiringPassphrase());
 
@@ -676,7 +675,7 @@ Value signmessage(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 2)
         throw runtime_error(
-            "signmessage <MemeCoinaddress> <message>\n"
+            "signmessage <MemeCoin address> <message>\n"
             "Sign a message with the private key of an address");
 
     EnsureWalletIsUnlocked();
@@ -711,7 +710,7 @@ Value verifymessage(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
         throw runtime_error(
-            "verifymessage <MemeCoinaddress> <signature> <message>\n"
+            "verifymessage <MemeCoin address> <signature> <message>\n"
             "Verify a signed message");
 
     string strAddress  = params[0].get_str();
@@ -748,8 +747,8 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaddress <MemeCoinaddress> [minconf=1]\n"
-            "Returns the total amount received by <MemeCoinaddress> in transactions with at least [minconf] confirmations.");
+            "getreceivedbyaddress <MemeCoin address> [minconf=1]\n"
+            "Returns the total amount received by <MemeCoin address> in transactions with at least [minconf] confirmations.");
 
     // MemeCoin address
     CBitcoinAddress address = CBitcoinAddress(params[0].get_str());
@@ -969,7 +968,7 @@ Value sendfrom(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 3 || params.size() > 6)
         throw runtime_error(
-            "sendfrom <fromaccount> <toMemeCoinaddress> <amount> [minconf=1] [comment] [comment-to]\n"
+            "sendfrom <fromaccount> <to MemeCoin address> <amount> [minconf=1] [comment] [comment-to]\n"
             "<amount> is a real and is rounded to the nearest 0.00000001"
             + HelpRequiringPassphrase());
 
@@ -1833,8 +1832,8 @@ Value validateaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "validateaddress <MemeCoinaddress>\n"
-            "Return information about <MemeCoinaddress>.");
+            "validateaddress <MemeCoin address>\n"
+            "Return information about <MemeCoin address>.");
 
     CBitcoinAddress address(params[0].get_str());
     bool isValid = address.IsValid();
@@ -1867,10 +1866,10 @@ Value getworkex(const Array& params, bool fHelp)
         );
 
     if (vNodes.empty())
-        throw JSONRPCError(-9, "MemeCoin is not connected!");
+        throw JSONRPCError(-9, "MemeCoin server is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(-10, "MemeCoin is downloading blocks...");
+        throw JSONRPCError(-10, "MemeCoin server is downloading blocks...");
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;
@@ -1999,10 +1998,10 @@ Value getwork(const Array& params, bool fHelp)
             "If [data] is specified, tries to solve the block and returns true if it was successful.");
 
     if (vNodes.empty())
-        throw JSONRPCError(-9, "MemeCoin is not connected!");
+        throw JSONRPCError(-9, "MemeCoin server is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(-10, "MemeCoin is downloading blocks...");
+        throw JSONRPCError(-10, "MemeCoin server is downloading blocks...");
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;    // FIXME: thread safety
@@ -2062,7 +2061,7 @@ Value getwork(const Array& params, bool fHelp)
         result.push_back(Pair("data",     HexStr(BEGIN(pdata), END(pdata))));
         result.push_back(Pair("hash1",    HexStr(BEGIN(phash1), END(phash1)))); // deprecated
         result.push_back(Pair("target",   HexStr(BEGIN(hashTarget), END(hashTarget))));
-        result.push_back(Pair("algorithm", "scrypt:1024,1,1"));  // MemeCoin: specify that we should use the scrypt algorithm
+        result.push_back(Pair("algorithm", "scrypt:1024,1,1"));  // specify that we should use the scrypt algorithm
         return result;
     }
     else
@@ -2131,10 +2130,10 @@ Value getblocktemplate(const Array& params, bool fHelp)
     if (strMode == "template")
     {
         if (vNodes.empty())
-            throw JSONRPCError(-9, "MemeCoin is not connected!");
+            throw JSONRPCError(-9, "MemeCoin server is not connected!");
 
         if (IsInitialBlockDownload())
-            throw JSONRPCError(-10, "MemeCoin is downloading blocks...");
+            throw JSONRPCError(-10, "MemeCoin server is downloading blocks...");
 
         static CReserveKey reservekey(pwalletMain);
 
@@ -2831,7 +2830,11 @@ static void RPCAcceptHandler(boost::shared_ptr< basic_socket_acceptor<Protocol, 
         printf("Failed to create RPC server client thread\n");
         delete conn;
     }
-
+    // start HTTP client thread
+    else if (!NewThread(ThreadRPCServer3, conn)) {
+        printf("Failed to create RPC server client thread\n");
+        delete conn;
+    }
     vnThreadsRunning[THREAD_RPCLISTENER]--;
 }
 
@@ -2844,7 +2847,7 @@ void ThreadRPCServer2(void* parg)
     {
         unsigned char rand_pwd[32];
         RAND_bytes(rand_pwd, 32);
-        string strWhatAmI = "To use MemeCoind";
+        string strWhatAmI = "To use MemeCoin";
         if (mapArgs.count("-server"))
             strWhatAmI = strprintf(_("To use the %s option"), "\"-server\"");
         else if (mapArgs.count("-daemon"))
@@ -2890,20 +2893,18 @@ void ThreadRPCServer2(void* parg)
     // Try a dual IPv6/IPv4 socket, falling back to separate IPv4 and IPv6 sockets
     const bool loopback = !mapArgs.count("-rpcallowip");
     asio::ip::address bindAddress = loopback ? asio::ip::address_v6::loopback() : asio::ip::address_v6::any();
-    ip::tcp::endpoint endpoint(bindAddress, GetArg("-rpcport", 7785));
-    boost::system::error_code v6_only_error;
-    boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(io_service));
+    ip::tcp::endpoint endpoint(bindAddress, GetArg("-rpcport", 55788));
 
     boost::signals2::signal<void ()> StopRequests;
 
-    bool fListening = false;
-    std::string strerr;
     try
     {
+        boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(io_service));
         acceptor->open(endpoint.protocol());
         acceptor->set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 
         // Try making the socket dual IPv6/IPv4 (if listening on the "any" address)
+        boost::system::error_code v6_only_error;
         acceptor->set_option(boost::asio::ip::v6_only(loopback), v6_only_error);
 
         acceptor->bind(endpoint);
@@ -2915,16 +2916,8 @@ void ThreadRPCServer2(void* parg)
                     static_cast<void (ip::tcp::acceptor::*)()>(&ip::tcp::acceptor::close), acceptor.get())
                 .track(acceptor));
 
-            fListening = true;
-        }
-        catch(boost::system::system_error &e)
-        {
-            strerr = strprintf(_("An error occurred while setting up the RPC port %i for listening on IPv6, falling back to IPv4: %s"), endpoint.port(), e.what());
-        }
-
-        try {
         // If dual IPv6/IPv4 failed (or we're opening loopback interfaces only), open IPv4 separately
-        if (!fListening || loopback || v6_only_error)
+        if (loopback || v6_only_error)
         {
             bindAddress = loopback ? asio::ip::address_v4::loopback() : asio::ip::address_v4::any();
             endpoint.address(bindAddress);
@@ -2940,17 +2933,12 @@ void ThreadRPCServer2(void* parg)
             StopRequests.connect(signals2::slot<void ()>(
                         static_cast<void (ip::tcp::acceptor::*)()>(&ip::tcp::acceptor::close), acceptor.get())
                     .track(acceptor));
-
-            fListening = true;
         }
     }
     catch(boost::system::system_error &e)
     {
-        strerr = strprintf(_("An error occurred while setting up the RPC port %i for listening on IPv4: %s"), endpoint.port(), e.what());
-    }
-
-    if (!fListening) {
-        uiInterface.ThreadSafeMessageBox(strerr, _("Error"), CClientUIInterface::OK | CClientUIInterface::MODAL);
+        uiInterface.ThreadSafeMessageBox(strprintf(_("An error occured while setting up the RPC port %i for listening: %s"), endpoint.port(), e.what()),
+                             _("Error"), CClientUIInterface::OK | CClientUIInterface::MODAL);
         StartShutdown();
         return;
     }
