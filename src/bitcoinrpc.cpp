@@ -313,7 +313,6 @@ Value getdifficulty(const Array& params, bool fHelp)
 }
 
 
-// Memecoin: Return average network hashes per second based on last number of blocks.
 Value GetNetworkHashPS(int lookup) {
     if (pindexBest == NULL)
         return 0;
