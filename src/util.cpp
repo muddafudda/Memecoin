@@ -1067,7 +1067,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", "MemeCoin.pid"));
+    boost::filesystem::path pathPidFile(GetArg("-pid", "MemeCoind.pid"));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }
@@ -1187,7 +1187,7 @@ void AddTimeData(const CNetAddr& ip, int64 nTime)
         int64 nMedian = vTimeOffsets.median();
         std::vector<int64> vSorted = vTimeOffsets.sorted();
         // Only let other nodes change our time by so much
-        if (abs64(nMedian) < 35 * 60) // changed maximum adjust to 35 mins to avoid letting peers change our time too much in case of an attack.
+        if (abs64(nMedian) < 35 * 60) // MemeCoin: changed maximum adjust to 35 mins to avoid letting peers change our time too much in case of an attack.
         {
             nTimeOffset = nMedian;
         }
@@ -1295,15 +1295,4 @@ void RenameThread(const char* name)
     // Prevent warnings for unused parameters...
     (void)name;
 #endif
-}
-bool NewThread(void(*pfn)(void*), void* parg)
-{
-    try
-    {
-        boost::thread(pfn, parg); // thread detaches when out of scope
-    } catch(boost::thread_resource_error &e) {
-        printf("Error creating thread: %s\n", e.what());
-        return false;
-    }
-    return true;
 }

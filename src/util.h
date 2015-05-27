@@ -544,7 +544,7 @@ public:
 
 
 
-bool NewThread(void(*pfn)(void*), void* parg);
+
 
 
 
@@ -577,6 +577,7 @@ inline HANDLE CreateThread(void(*pfn)(void*), void* parg, bool fWantHandle=false
     }
     return hthread;
 }
+
 inline void SetThreadPriority(int nPriority)
 {
     SetThreadPriority(GetCurrentThread(), nPriority);

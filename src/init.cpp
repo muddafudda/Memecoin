@@ -47,7 +47,7 @@ void StartShutdown()
     uiInterface.QueueShutdown();
 #else
     // Without UI, Shutdown() can simply be started in a new thread
-    NewThread(Shutdown, NULL);
+    CreateThread(Shutdown, NULL);
 #endif
 }
 
@@ -79,7 +79,7 @@ void Shutdown(void* parg)
         boost::filesystem::remove(GetPidFile());
         UnregisterWallet(pwalletMain);
         delete pwalletMain;
-        NewThread(ExitTimeout, NULL);
+        CreateThread(ExitTimeout, NULL);
         Sleep(50);
         printf("MemeCoin exited\n\n");
         fExit = true;
@@ -124,7 +124,7 @@ bool AppInit(int argc, char* argv[])
         //
         // Parameters
         //
-        // If Qt is used, parameters/memecoin.conf are parsed in qt/bitcoin.cpp's main()
+        // If Qt is used, parameters/MemeCoin.conf are parsed in qt/bitcoin.cpp's main()
         ParseParameters(argc, argv);
         if (!boost::filesystem::is_directory(GetDataDir(false)))
         {
@@ -135,13 +135,13 @@ bool AppInit(int argc, char* argv[])
 
         if (mapArgs.count("-?") || mapArgs.count("--help"))
         {
-            // First part of help message is specific to MemeCoin server / RPC client
+            // First part of help message is specific to MemeCoind / RPC client
             std::string strUsage = _("MemeCoin version") + " " + FormatFullVersion() + "\n\n" +
                 _("Usage:") + "\n" +
-                  "  MemeCoin [options]                     " + "\n" +
-                  "  MemeCoin [options] <command> [params]  " + _("Send command to -server or MemeCoin") + "\n" +
-                  "  MemeCoin [options] help                " + _("List commands") + "\n" +
-                  "  MemeCoin [options] help <command>      " + _("Get help for a command") + "\n";
+                  "  MemeCoind [options]                     " + "\n" +
+                  "  MemeCoind [options] <command> [params]  " + _("Send command to -server or MemeCoind") + "\n" +
+                  "  MemeCoind [options] help                " + _("List commands") + "\n" +
+                  "  MemeCoind [options] help <command>      " + _("Get help for a command") + "\n";
 
             strUsage += "\n" + HelpMessage();
 
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
 {
     bool fRet = false;
 
-    // Connect signal handlers
+    // Connect MemeCoind signal handlers
     noui_connect();
 
     fRet = AppInit(argc, argv);
@@ -214,15 +214,12 @@ bool static Bind(const CService &addr, bool fError = true) {
     return true;
 }
 
-/* import from bitcoinrpc.cpp */
-extern double GetDifficulty(const CBlockIndex* blockindex = NULL);
-
 // Core-specific options shared between UI and daemon
 std::string HelpMessage()
 {
     string strUsage = _("Options:") + "\n" +
         "  -conf=<file>           " + _("Specify configuration file (default: MemeCoin.conf)") + "\n" +
-        "  -pid=<file>            " + _("Specify pid file (default: MemeCoin.pid)") + "\n" +
+        "  -pid=<file>            " + _("Specify pid file (default: MemeCoind.pid)") + "\n" +
         "  -gen                   " + _("Generate coins") + "\n" +
         "  -gen=0                 " + _("Don't generate coins") + "\n" +
         "  -datadir=<dir>         " + _("Specify data directory") + "\n" +
@@ -256,7 +253,6 @@ std::string HelpMessage()
         "  -upnp                  " + _("Use UPnP to map the listening port (default: 0)") + "\n" +
 #endif
 #endif
-
         "  -detachdb              " + _("Detach block and address databases. Increases shutdown time (default: 0)") + "\n" +
         "  -paytxfee=<amt>        " + _("Fee per KB to add to transactions you send") + "\n" +
         "  -mininput=<amt>        " + _("When creating transactions, ignore inputs with value less than this (default: 0.0001)") + "\n" +
@@ -336,7 +332,7 @@ bool AppInit2()
     // ********************************************************* Step 2: parameter interactions
 
     fTestNet = GetBoolArg("-testnet");
-    // Keep irc seeding on by default for now.
+    // MemeCoin: Keep irc seeding on by default for now.
 //    if (fTestNet)
 //    {
         SoftSetBoolArg("-irc", true);
@@ -630,32 +626,6 @@ bool AppInit2()
         return false;
     }
 
-    if (mapArgs.count("-exportStatData"))
-    {
-        FILE* file = fopen((GetDataDir() / "blockstat.dat").string().c_str(), "w");
-        if (!file)
-           return false;
-        
-        for (map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.begin(); mi != mapBlockIndex.end(); ++mi)
-        {
-            CBlockIndex* pindex = (*mi).second;
-            CBlock block;
-            block.ReadFromDisk(pindex);
-            block.BuildMerkleTree();
-            fprintf(file, "%d,%s,%s,%d,%f,%u\n",
-                pindex->nHeight, /* todo: height */
-                block.GetHash().ToString().c_str(),
-                block.GetPoWHash().ToString().c_str(),
-                block.nVersion,
-                //CBigNum().SetCompact(block.nBits).getuint256().ToString().c_str(),
-                GetDifficulty(pindex),
-                block.nTime
-            );
-        }
-        fclose(file);
-        return false;
-    }
-
     // ********************************************************* Step 7: load wallet
 
     uiInterface.InitMessage(_("Loading wallet..."));
@@ -774,11 +744,11 @@ bool AppInit2()
     printf("mapWallet.size() = %d\n",       pwalletMain->mapWallet.size());
     printf("mapAddressBook.size() = %d\n",  pwalletMain->mapAddressBook.size());
 
-    if (!NewThread(StartNode, NULL))
+    if (!CreateThread(StartNode, NULL))
         InitError(_("Error: could not start node"));
 
     if (fServer)
-        NewThread(ThreadRPCServer, NULL);
+        CreateThread(ThreadRPCServer, NULL);
 
     // ********************************************************* Step 11: finished
 

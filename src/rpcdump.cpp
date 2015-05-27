@@ -1,5 +1,4 @@
-// Copyright (c) 2011-2015 Litecoin Developers
-// Copyright (c) 2009-2015 Bitcoin Developers
+// Copyright (c) 2009-2012 Bitcoin Developers
 // Copyright (c) 2011-2015 Litecoin Developers
 // Copyright (c) 2013-2015 MemeCoin Developers
 // Distributed under the MIT/X11 software license, see the accompanying
@@ -39,7 +38,7 @@ Value importprivkey(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "importprivkey <MemeCoin private key> [label]\n"
+            "importprivkey <MemeCoinprivkey> [label]\n"
             "Adds a private key (as returned by dumpprivkey) to your wallet.");
 
     string strSecret = params[0].get_str();
@@ -76,8 +75,8 @@ Value dumpprivkey(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-	    "dumpprivkey <MemeCoin address>\n"
-	    "Reveals the private key corresponding to <MemeCoin address>.");
+	    "dumpprivkey <MemeCoinaddress>\n"
+	    "Reveals the private key corresponding to <MemeCoinaddress>.");
 
     string strAddress = params[0].get_str();
     CBitcoinAddress address;
