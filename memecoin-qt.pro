@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET =
 VERSION = 2.3.0
 INCLUDEPATH += src src/json src/qt
-DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6 BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN __NO_SYSTEM_INCLUDES
+DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE  BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN __NO_SYSTEM_INCLUDES
 CONFIG += no_include_pwd
 
 # for boost 1.37, add -mt to the boost libraries
@@ -14,13 +14,15 @@ CONFIG += no_include_pwd
 # Dependency library locations can be customized with:
 #    BOOST_INCLUDE_PATH, BOOST_LIB_PATH, BDB_INCLUDE_PATH,
 #    BDB_LIB_PATH, OPENSSL_INCLUDE_PATH and OPENSSL_LIB_PATH respectively
+#CONFIG += thread
+#CONFIG += static
 #BOOST_LIB_SUFFIX=-mgw49-mt-s-1_55
 #BOOST_INCLUDE_PATH=C:/deps/boost_1_55_0
 #BOOST_LIB_PATH=C:/deps/boost_1_55_0/stage/lib
 #BDB_INCLUDE_PATH=C:/deps/db-4.8.30.NC/build_unix
 #BDB_LIB_PATH=C:/deps/db-4.8.30.NC/build_unix
-#OPENSSL_INCLUDE_PATH=C:/deps/openssl-1.0.1j/include
-#OPENSSL_LIB_PATH=C:/deps/openssl-1.0.1j
+#OPENSSL_INCLUDE_PATH=C:/deps/openssl-1.0.1m/include
+#OPENSSL_LIB_PATH=C:/deps/openssl-1.0.1m
 #MINIUPNPC_INCLUDE_PATH=C:/deps/
 #MINIUPNPC_LIB_PATH=C:/deps/miniupnpc
 #QRENCODE_INCLUDE_PATH=C:/deps/qrencode-3.4.4
@@ -31,6 +33,22 @@ CONFIG += no_include_pwd
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
+
+!win32 {
+    # for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
+    QMAKE_CXXFLAGS *= -fstack-protector-all
+    QMAKE_LFLAGS *= -fstack-protector-all
+    # Exclude on Windows cross compile with MinGW 4.2.x, as it will result in a non-working executable!
+    # This can be enabled for Windows, when we switch to MinGW >= 4.4.x.
+}
+# for extra security (see: https://wiki.debian.org/Hardening): this flag is GCC compiler-specific
+QMAKE_CXXFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
+# for extra security on Windows: enable ASLR and DEP via GCC linker flags
+win32:QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
+# on Windows: enable GCC large address aware linker flag
+win32:QMAKE_LFLAGS *= -Wl,--large-address-aware -static
+# i686-w64-mingw32
+win32:QMAKE_LFLAGS *= -static-libgcc -static-libstdc++
 
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
@@ -178,6 +196,7 @@ HEADERS += src/qt/bitcoingui.h \
     src/scrypt.h \
     src/qt/miningpage.h \
     src/version.h \
+    src/qt/blockbrowser.h \
     src/qt/rpcconsole.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
@@ -239,7 +258,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/rpcconsole.cpp \
     src/scrypt.c \
     src/qt/miningpage.cpp \
-    src/noui.cpp
+    src/noui.cpp \
+    src/qt/blockbrowser.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
@@ -256,7 +276,8 @@ FORMS += \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
     src/qt/forms/miningpage.ui \
-    src/qt/forms/optionsdialog.ui
+    src/qt/forms/optionsdialog.ui \
+    src/qt/forms/blockbrowser.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h

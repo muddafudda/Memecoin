@@ -15,6 +15,7 @@ class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class Notificator;
 class RPCConsole;
+class BlockBrowser;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -57,7 +58,7 @@ protected:
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
-
+    BlockBrowser *blockBrowser;
     QStackedWidget *centralWidget;
 
     OverviewPage *overviewPage;
@@ -95,6 +96,7 @@ private:
     QAction *changePassphraseAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
+    QAction *blockAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -151,7 +153,8 @@ private slots:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage();
-
+    /** Switch to block explorer page */
+    void gotoBlockBrowser();
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */

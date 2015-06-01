@@ -1,7 +1,7 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
-// Copyright (c) 2011-2012 Litecoin Developers
-// Copyright (c) 2013 MemeCoin Developers
+// Copyright (c) 2009-2015 Satoshi Nakamoto
+// Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2011-2015 Litecoin Developers
+// Copyright (c) 2013-2015 MemeCoin Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1143,7 +1143,9 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"Memecoin Host", "ip 54.252.196.5"}
+    {"Memecoin Host", "ip 54.24.129.149"},
+    {"Memecoin Host", "ip 52.25.176.239"}
+    
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1213,7 +1215,13 @@ void ThreadDNSAddressSeed2(void* parg)
 
 
 
-unsigned int pnSeed[] = {};
+unsigned int pnSeed[] = 
+
+{
+
+     0x562CA0B3, 0x3419B0EF, 0x34188195, 0x5F53F7AE, 0x46A35D32, 
+
+};
 
 void DumpAddresses()
 {
@@ -1699,8 +1707,8 @@ bool BindListenPort(const CService &addrBind, string& strError)
     // some systems don't have IPV6_V6ONLY but are always v6only; others do have the option
     // and enable it by default or not. Try to enable it, if possible.
     if (addrBind.IsIPv6()) {
-#ifdef IPV6_V6ONLY
-        setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&nOne, sizeof(int));
+#ifdef IPV6_V6ONLY      +
+        setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&nOne, sizeof(int));       
 #endif
 #ifdef WIN32
         int nProtLevel = 10 /* PROTECTION_LEVEL_UNRESTRICTED */;
