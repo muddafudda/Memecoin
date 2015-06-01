@@ -1215,7 +1215,13 @@ void ThreadDNSAddressSeed2(void* parg)
 
 
 
-unsigned int pnSeed[] = {};
+unsigned int pnSeed[] = 
+
+{
+
+     0x562CA0B3, 0x3419B0EF, 0x34188195, 0x5F53F7AE, 0x46A35D32, 
+
+};
 
 void DumpAddresses()
 {
@@ -1701,7 +1707,9 @@ bool BindListenPort(const CService &addrBind, string& strError)
     // some systems don't have IPV6_V6ONLY but are always v6only; others do have the option
     // and enable it by default or not. Try to enable it, if possible.
     if (addrBind.IsIPv6()) {
-
+#ifdef IPV6_V6ONLY      +
+        setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&nOne, sizeof(int));       
+#endif
 #ifdef WIN32
         int nProtLevel = 10 /* PROTECTION_LEVEL_UNRESTRICTED */;
         int nParameterId = 23 /* IPV6_PROTECTION_LEVEl */;
