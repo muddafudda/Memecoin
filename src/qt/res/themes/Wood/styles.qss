@@ -35,12 +35,12 @@
 
 /* Overview */
  QMainWindow {
-	border-image: url($themes-dir/Blackwood/wood.jpg);
+	border-image: url($themes-dir/Wood/wood.jpg);
 }
 
 /* Dialogs */
 QDialog, QTableView{
-	border-image: url($themes-dir/Blackwood/black.jpg);
+	border-image: url($themes-dir/Wood/black.jpg);
      font-size: 14px;
 }
 /* Group Box */
@@ -235,16 +235,16 @@ QComboBox::drop-down:disabled {
 
 QComboBox::down-arrow {
 	/* Custom dropdown symbol */
-	image: url($themes-dir/Blackwood/down-arrow.png);
+	image: url($themes-dir/Wood/down-arrow.png);
 }
 
 QComboBox::down-arrow:disabled {
-	image: url($themes-dir/Blackwood/down-arrow-disabled.png);
+	image: url($themes-dir/Wood/down-arrow-disabled.png);
 }
 
 QComboBox::down-arrow:on {
 	/* Custom dropdown symbol */
-	image: url($themes-dir/Blackwood/up-arrow.png);
+	image: url($themes-dir/Wood/up-arrow.png);
 }
 
 QComboBox::drop-down {
@@ -282,11 +282,11 @@ QDateTimeEdit:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled {
 }
 
 QDateTimeEdit::down-arrow {
-	image: url($themes-dir/Blackwood/calendar.png);
+	image: url($themes-dir/Wood/calendar.png);
 }
 
 QDateTimeEdit::down-arrow:disabled {
-	image: url($themes-dir/Blackwood/calendar-disabled.png);
+	image: url($themes-dir/Wood/calendar-disabled.png);
 }
 
 QDateTimeEdit::drop-down {
@@ -294,11 +294,11 @@ QDateTimeEdit::drop-down {
 }
 
 QDoubleSpinBox::down-button {
-	image: url($themes-dir/Blackwood/down-arrow.png);
+	image: url($themes-dir/Wood/down-arrow.png);
 }
 
 QDoubleSpinBox::up-button {
-	image: url($themes-dir/Blackwood/up-arrow.png);
+	image: url($themes-dir/Wood/up-arrow.png);
 }
 
 /* Button */
@@ -360,7 +360,7 @@ QToolBar {
 
 QToolBar::handle {
 	padding: 0px;
-	background-image: url($themes-dir/Blackwood/toolbar-handle.png);
+	background-image: url($themes-dir/Wood/toolbar-handle.png);
 	background-repeat: repeat-y;
 	background-position: top center;
 }
@@ -401,7 +401,7 @@ QToolBar QToolButton:disabled {
 
 /* Tool buttons - buttons with icons */
 #qt_toolbar_ext_button {
-	qproperty-icon: url($themes-dir/Blackwood/arrow-down.png);
+	qproperty-icon: url($themes-dir/Wood/arrow-down.png);
 	border-radius: 0px;
 	margin-top: 0px;
 	color: #fff;
@@ -547,35 +547,35 @@ QCheckBox::indicator {
 }
 
 QCheckBox::indicator:unchecked {
-	image: url($themes-dir/Blackwood/cb.png);
+	image: url($themes-dir/Wood/cb.png);
 }
 
 QCheckBox::indicator:unchecked:hover {
-	image: url($themes-dir/Blackwood/cb-hover.png);
+	image: url($themes-dir/Wood/cb-hover.png);
 }
 
 QCheckBox::indicator:unchecked:pressed {
-	/*image: url($themes-dir/Blackwood/checkbox_unchecked_pressed.png);*/
+	/*image: url($themes-dir/Wood/checkbox_unchecked_pressed.png);*/
 }
 
 QCheckBox::indicator:checked {
-	image: url($themes-dir/Blackwood/cb-checked.png);
+	image: url($themes-dir/Wood/cb-checked.png);
 }
 
 QCheckBox::indicator:checked:hover {
-	image: url($themes-dir/Blackwood/cb-checked-hover.png);
+	image: url($themes-dir/Wood/cb-checked-hover.png);
 }
 
 QCheckBox::indicator:checked:pressed {
-	/*image: url($themes-dir/Blackwood/checkbox_checked_pressed.png);*/
+	/*image: url($themes-dir/Wood/checkbox_checked_pressed.png);*/
 }
 
 QCheckBox::indicator:indeterminate:hover {
-	/*image: url($themes-dir/Blackwood/checkbox_indeterminate_hover.png);*/
+	/*image: url($themes-dir/Wood/checkbox_indeterminate_hover.png);*/
 }
 
 QCheckBox::indicator:indeterminate:pressed {
-	/*image: url($themes-dir/Blackwood/checkbox_indeterminate_pressed.png);*/
+	/*image: url($themes-dir/Wood/checkbox_indeterminate_pressed.png);*/
 }
 
 /* Radio button */
@@ -589,27 +589,27 @@ QRadioButton::indicator {
 }
 
 QRadioButton::indicator::unchecked {
-	image: url($themes-dir/Blackwood/r.png);
+	image: url($themes-dir/Wood/r.png);
 }
 
 QRadioButton::indicator:unchecked:hover {
-	image: url($themes-dir/Blackwood/r-hover.png);
+	image: url($themes-dir/Wood/r-hover.png);
 }
 
 QRadioButton::indicator:unchecked:pressed {
-	/*image: url($themes-dir/Blackwood/rpressed.png);*/
+	/*image: url($themes-dir/Wood/rpressed.png);*/
 }
 
 QRadioButton::indicator::checked {
-	image: url($themes-dir/Blackwood/r-checked.png);
+	image: url($themes-dir/Wood/r-checked.png);
 }
 
 QRadioButton::indicator:checked:hover {
-	image: url($themes-dir/Blackwood/r-checked-hover.png);
+	image: url($themes-dir/Wood/r-checked-hover.png);
 }
 
 QRadioButton::indicator:checked:pressed {
-	/*image: url($themes-dir/Blackwood/radiobutton_checked_pressed.png);*/
+	/*image: url($themes-dir/Wood/radiobutton_checked_pressed.png);*/
 }
 
 /* Tabs */
@@ -701,7 +701,7 @@ QCalendarWidget QAbstractItemView:disabled { color: $main-color-xd }
 
 /* Window resize grip */
 QSizeGrip {
-	image: url($themes-dir/Blackwood/sizegrip.png);
+	image: url($themes-dir/Wood/sizegrip.png);
 	width: 16px;
 	height: 16px;
 }
