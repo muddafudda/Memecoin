@@ -1,0 +1,5 @@
+/* Overview */
+ QMainWindow {
+        border-image: url($themes-dir/Owlcon/owl.jpg);
+}
+
